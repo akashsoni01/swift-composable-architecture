@@ -9,13 +9,13 @@ import SwiftUI
 import ComposableArchitecture
 
 struct AppFeature: Reducer {
-    struct State {
+    struct State: Equatable {
         var firstTab = FirstTabFeature.State()
         var inventory = InventoryFeature.State()
         var thirdTab = ThirdTabFeature.State()
         var selectedTab: Tab = .one
     }
-    enum Action {
+    enum Action: Equatable {
         case firstTab(FirstTabFeature.Action)
         case inventory(InventoryFeature.Action)
         case thirdTab(ThirdTabFeature.Action)
@@ -25,9 +25,18 @@ struct AppFeature: Reducer {
     var body: some Reducer<State, Action> {
         Reduce<State, Action> { state, aciton in
             switch aciton {
-            case .firstTab, .inventory, .thirdTab:
+            case let .selectedTabChanged(tab):
+                state.selectedTab = tab
                 return .none
-            case .selectedTabChanged(_):
+            case let .firstTab(.delegate(delegateAction)):
+                switch delegateAction {
+                case .swithtoInventoryTab:
+                    state.selectedTab = .inventory
+                    return .none
+
+                }
+
+            case .firstTab, .inventory, .thirdTab:
                 return .none
                 
             }
@@ -43,17 +52,6 @@ struct AppFeature: Reducer {
         }
     }
     
-    func reduce(into state: inout State, action: Action) -> Effect<Action> {
-        switch action {
-        case let .selectedTabChanged(tab):
-            state.selectedTab = tab
-            return .none
-        case .firstTab(.goToInventoryButtonTapped):
-            state.selectedTab = .inventory
-            return .none
-        }
-        
-    }
 }
 
 enum Tab {

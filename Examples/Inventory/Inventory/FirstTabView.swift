@@ -12,11 +12,27 @@ struct FirstTabFeature: Reducer {
     struct State: Equatable {}
     enum Action: Equatable {
         case goToInventoryButtonTapped
+        case delegate(Delegate)
     }
+    /// The parent domain shouldn’t be responsible for listening to all of those different events to figure out when to mutate the selectedTab state.
+    /// Instead, it would be far preferable if the child domain could clearly communicate when it wants the parent to switch to the inventory tab.
+    /// There is lightweight pattern to accomplish this, and it’s something we did in our open source word game, isowords, and we have used the pattern in client projects too.
+    /// The idea is for the child feature to carve out a little space in its Action enum for describing commands for the parent feature to interpret. We will do this by introducing a nested “delegate” action enum:
+    /// To sum up :-
+    //** delegate action are thoes that a parent reducer may care about. ** //
+
+    enum Delegate: Equatable {
+     case swithtoInventoryTab
+    }
+    
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
-        case .goToInventoryButtonTapped:
+        case .delegate:
             return .none
+            
+        case .goToInventoryButtonTapped:
+            // don't send action in sync fashion better of use helper method to perform these task.
+            return .send(.delegate(.swithtoInventoryTab))
         }
     }
 }

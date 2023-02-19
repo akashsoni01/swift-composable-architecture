@@ -9,8 +9,8 @@ import SwiftUI
 import ComposableArchitecture
 
 struct ThirdTabFeature: Reducer {
-    struct State {}
-    enum Action {}
+    struct State: Equatable {}
+    enum Action: Equatable {}
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         return .none
     }
