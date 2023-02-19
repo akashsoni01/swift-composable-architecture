@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF56487329A1516100C232BA /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = FF56487229A1516100C232BA /* ComposableArchitecture */; };
 		FF5E8E6A29A14ECD00A8CEE3 /* SuperhumanApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5E8E6929A14ECD00A8CEE3 /* SuperhumanApp.swift */; };
 		FF5E8E6C29A14ECD00A8CEE3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5E8E6B29A14ECD00A8CEE3 /* ContentView.swift */; };
 		FF5E8E6E29A14ECE00A8CEE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FF5E8E6D29A14ECE00A8CEE3 /* Assets.xcassets */; };
@@ -56,6 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF56487329A1516100C232BA /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +78,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF56487129A1515300C232BA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		FF5E8E5D29A14ECD00A8CEE3 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +92,7 @@
 				FF5E8E7F29A14ECE00A8CEE3 /* SuperhumanTests */,
 				FF5E8E8929A14ECE00A8CEE3 /* SuperhumanUITests */,
 				FF5E8E6729A14ECD00A8CEE3 /* Products */,
+				FF56487129A1515300C232BA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -151,6 +161,9 @@
 			dependencies = (
 			);
 			name = Superhuman;
+			packageProductDependencies = (
+				FF56487229A1516100C232BA /* ComposableArchitecture */,
+			);
 			productName = Superhuman;
 			productReference = FF5E8E6629A14ECD00A8CEE3 /* Superhuman.app */;
 			productType = "com.apple.product-type.application";
@@ -593,6 +606,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FF56487229A1516100C232BA /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		FF5E8E7429A14ECE00A8CEE3 /* Superhuman.xcdatamodeld */ = {
