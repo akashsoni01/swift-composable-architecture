@@ -16,6 +16,8 @@
 		FFD84E7829A252D500B6AC21 /* InventoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD84E7729A252D500B6AC21 /* InventoryView.swift */; };
 		FFD84E7A29A252E100B6AC21 /* ThirdTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD84E7929A252E100B6AC21 /* ThirdTabView.swift */; };
 		FFD84E8229A2640C00B6AC21 /* InventoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD84E8129A2640C00B6AC21 /* InventoryTests.swift */; };
+		FFD84E8929A292FA00B6AC21 /* Vanila.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD84E8829A292FA00B6AC21 /* Vanila.swift */; };
+		FFD84E8B29A2932100B6AC21 /* VanilaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD84E8A29A2932100B6AC21 /* VanilaTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +41,8 @@
 		FFD84E7929A252E100B6AC21 /* ThirdTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdTabView.swift; sourceTree = "<group>"; };
 		FFD84E7F29A2640C00B6AC21 /* InventoryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InventoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFD84E8129A2640C00B6AC21 /* InventoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryTests.swift; sourceTree = "<group>"; };
+		FFD84E8829A292FA00B6AC21 /* Vanila.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vanila.swift; sourceTree = "<group>"; };
+		FFD84E8A29A2932100B6AC21 /* VanilaTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VanilaTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +93,7 @@
 				FFD84E7529A251F900B6AC21 /* FirstTabView.swift */,
 				FFD84E7729A252D500B6AC21 /* InventoryView.swift */,
 				FFD84E7929A252E100B6AC21 /* ThirdTabView.swift */,
+				FFD84E8829A292FA00B6AC21 /* Vanila.swift */,
 			);
 			path = Inventory;
 			sourceTree = "<group>";
@@ -112,6 +117,7 @@
 			isa = PBXGroup;
 			children = (
 				FFD84E8129A2640C00B6AC21 /* InventoryTests.swift */,
+				FFD84E8A29A2932100B6AC21 /* VanilaTests.swift */,
 			);
 			path = InventoryTests;
 			sourceTree = "<group>";
@@ -221,6 +227,7 @@
 			files = (
 				FFD84E7629A251F900B6AC21 /* FirstTabView.swift in Sources */,
 				FFD84E7A29A252E100B6AC21 /* ThirdTabView.swift in Sources */,
+				FFD84E8929A292FA00B6AC21 /* Vanila.swift in Sources */,
 				FFD84E6729A2383500B6AC21 /* ContentView.swift in Sources */,
 				FFD84E6529A2383500B6AC21 /* InventoryApp.swift in Sources */,
 				FFD84E7829A252D500B6AC21 /* InventoryView.swift in Sources */,
@@ -231,6 +238,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFD84E8B29A2932100B6AC21 /* VanilaTests.swift in Sources */,
 				FFD84E8229A2640C00B6AC21 /* InventoryTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
