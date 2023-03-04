@@ -10,9 +10,12 @@ import ComposableArchitecture
 import SwiftUINavigation
 
 struct ItemFormFeature: Reducer {
-  struct State: Equatable {
-    @BindingState var item: Item
-  }
+    struct State: Equatable, Identifiable {
+        @BindingState var item: Item
+        
+        var id: Item.ID { self.item.id }
+        
+    }
     
   enum Action: BindableAction, Equatable {
       case binding(BindingAction<State>)

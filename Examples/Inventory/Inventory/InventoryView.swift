@@ -235,43 +235,48 @@ struct InventoryView: View {
             /*
              We can hide .dismissAddItem for sheet as well as we did for alert and confirmation dialog.
              */
+            
+            /*
+             We can reduce the code by creating view extension.
+             .sheet(
+               item: viewStore.binding(
+                 get: {
+                   $0.addItemID.map { Identified($0, id: \.self) }
+                 },
+                 send: .addItem(.dismiss)
+               )
+             ) { addItemID in
+                 IfLetStore(
+                   self.store.scope(
+                     state: \.addItem,
+                     action: {.addItem(.presented($0))}
+                   )
+                 )
+             */
+              
           .sheet(
-            item: viewStore.binding(
-              get: {
-                $0.addItemID.map { Identified($0, id: \.self) }
-              },
-              send: .addItem(.dismiss)
-            )
-          ) { addItemID in
-              IfLetStore(
-                self.store.scope(
-                  state: \.addItem,
-                  action: {.addItem(.presented($0))}
-                )
-              ) { store in
-                  /*
-                   Adding NavigationStack and toolbar will help to customise the view if defined in parent view.
-                   */
-                  NavigationStack {
-                    ItemFormView(store: store)
-                      .toolbar {
-                          HStack {
-                              Button("Cancel") {
-                                viewStore.send(.cancelAddItemButtonTapped)
-                              }
-                              
-                              Spacer()
-                                  
-                              Button("Add") {
-                                viewStore.send(.confirmAddItemButtonTapped)
-                              }
-                          }
-
-                      }
-                      .navigationTitle("New item")
-                  }
-              }
-          }
+                 store: self.store.scope(state: \.addItem, action: InventoryFeature.Action.addItem)
+               ) { store in
+                   /*
+                    Adding NavigationStack and toolbar will help to customise the view if defined in parent view.
+                    */
+                   NavigationStack {
+                     ItemFormView(store: store)
+                       .toolbar {
+                           HStack {
+                               Button("Cancel") {
+                                 viewStore.send(.cancelAddItemButtonTapped)
+                               }
+                               
+                                   
+                               Button("Add") {
+                                 viewStore.send(.confirmAddItemButtonTapped)
+                               }
+                           }
+                       }
+                       .navigationTitle("New item")
+                   }
+               }
         }
     }
 }
