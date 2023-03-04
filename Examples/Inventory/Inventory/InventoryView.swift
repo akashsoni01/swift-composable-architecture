@@ -18,11 +18,11 @@ struct InventoryFeature: Reducer {
     }
     enum Action: Equatable {
         case addButtonTapped
-        case addItem(ItemFormFeature.Action)
+        case addItem(SheetAction<ItemFormFeature.Action>)
         case alert(AlertAction<Alert>)
         case confirmationDialog(ConfirmationDialogAction<Dialog>)
         case deleteButtonTapped(id: Item.ID)
-        case dismissAddItem
+//        case dismissAddItem
         case duplicateButtonTapped(id: Item.ID)
         case cancelAddItemButtonTapped
         case confirmAddItemButtonTapped
@@ -45,9 +45,14 @@ struct InventoryFeature: Reducer {
                 item: Item(name: "", status: .inStock(quantity: 1))
               )
               return .none
-          case .dismissAddItem:
+              
+          case .addItem(.dismiss):
               state.addItem = nil
               return .none
+              
+//          case .dismissAddItem:
+//              state.addItem = nil
+//              return .none
               
           case .addItem:
             return .none
@@ -101,7 +106,10 @@ struct InventoryFeature: Reducer {
         }
         .alert(state: \.alert, action: /Action.alert)
         .confirmationDialog(state: \.confirmationDialog, action: /Action.confirmationDialog)
-        .ifLet(\.addItem, action: /Action.addItem) {
+        .ifLet(
+            \.addItem,
+             action: (/Action.addItem).appending(path: /SheetAction.presented)
+        ) {
           ItemFormFeature()
         }
 
@@ -218,18 +226,21 @@ struct InventoryView: View {
                 action: InventoryFeature.Action.confirmationDialog)
                )
             
+            /*
+             We can hide .dismissAddItem for sheet as well as we did for alert and confirmation dialog.
+             */
           .sheet(
             item: viewStore.binding(
               get: {
                 $0.addItemID.map { Identified($0, id: \.self) }
               },
-              send: .dismissAddItem
+              send: .addItem(.dismiss)
             )
           ) { addItemID in
               IfLetStore(
                 self.store.scope(
                   state: \.addItem,
-                  action: InventoryFeature.Action.addItem
+                  action: {.addItem(.presented($0))}
                 )
               ) { store in
                   /*
@@ -244,7 +255,7 @@ struct InventoryView: View {
                               }
                               
                               Spacer()
-                              
+                                  
                               Button("Add") {
                                 viewStore.send(.confirmAddItemButtonTapped)
                               }

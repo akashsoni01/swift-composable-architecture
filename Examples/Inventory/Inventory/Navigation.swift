@@ -21,7 +21,49 @@ enum ConfirmationDialogAction<Action> {
 }
 extension ConfirmationDialogAction: Equatable where Action: Equatable {}
 
+enum SheetAction<Action> {
+  case dismiss
+  case presented(Action)
+}
+extension SheetAction: Equatable where Action: Equatable {}
 
+/*
+ extension Reduce {
+     func sheet(
+         state: WritableKeyPath<State, ChildState?>
+         action: CasePath<Action, SheetAction<ChildAction>>,
+         @reducerBuilder<ChildState, ChildAction> child: () -> some
+     ) -> some ReducerOf<Self> {
+         Reducer { state, action in
+             switch (state[keyPath: stateKeypath], actionCasepath.extract(from: action0)) {
+                 
+             case (_, .none):
+                 return self.reduce(into: &state, action: action)
+                 
+             case (.none, .some(.presentated), (.none, .some(.dismiss))):
+                 XCTFail()("A sheet action was sent while child state was nil.")
+                 return self.reduce(into: &state, action: action)
+             case (var .some(childState), .some(let .presented(childAction))):
+                 let childEffects = child().reduceChild(into: childState, action: childAction)
+                 state[keyPath: stateKeyPath] = childState
+                 let effects = self.reduce(into: &state, action: action)
+                 
+                 return .mrege(
+                     childEffects.map( actionCasepath.embed(.presented($0))),
+                     
+                 )
+                 
+                 
+             case let (.some, .some(.dismiss)):
+                 let effects = self.reduce(into: &state, action: action)
+                 state[kayPath: stateKeyPath] = nil
+                 return effects
+             }
+         }
+     }
+ }
+
+ */
 extension Reducer {
   func alert<Action>(
     state alertKeyPath: WritableKeyPath<State, AlertState<Action>?>,
