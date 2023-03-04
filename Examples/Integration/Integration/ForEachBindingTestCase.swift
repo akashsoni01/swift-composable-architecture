@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct ForEachBindingTestCase: ReducerProtocol {
+private struct ForEachBindingTestCase: Reducer {
   struct State: Equatable {
     var values = ["A", "B", "C"]
   }
@@ -26,17 +26,33 @@ struct ForEachBindingTestCase: ReducerProtocol {
 }
 
 struct ForEachBindingTestCaseView: View {
-  let store: StoreOf<ForEachBindingTestCase>
+  @State var assertion: String?
+  private let store = Store(
+    initialState: ForEachBindingTestCase.State(),
+    reducer: ForEachBindingTestCase()
+  )
 
   var body: some View {
     WithViewStore(self.store, observe: { $0 }) { viewStore in
       VStack {  // ⚠️ Must use VStack, not List.
+        if let assertion = self.assertion {
+          Text(assertion)
+        }
         ForEach(Array(viewStore.values.enumerated()), id: \.offset) { offset, value in
           HStack {  // ⚠️ Must wrap in an HStack.
             TextField(  // ⚠️ Must use a TextField.
               "\(value)",
               text: viewStore.binding(
-                get: { $0.values[offset] },
+                get: {
+                  if offset < $0.values.count {
+                    return $0.values[offset]
+                  } else {
+                    DispatchQueue.main.async {
+                      self.assertion = "🛑"
+                    }
+                    return ""
+                  }
+                },
                 send: { .change(offset: offset, value: $0) }
               )
             )

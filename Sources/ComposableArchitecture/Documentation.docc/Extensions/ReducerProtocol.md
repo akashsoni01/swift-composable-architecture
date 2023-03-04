@@ -4,34 +4,37 @@
 
 ### Implementing a reducer
 
-- ``reduce(into:action:)-8yinq``
+- ``reduce(into:action:)-4zl56``
 - ``State``
 - ``Action``
-- ``EffectPublisher``
+- ``EffectTask``
 
 ### Reducer composition
 
-- ``body-swift.property-97ymy``
+- ``body-swift.property-8lumc``
 - ``Body-swift.typealias``
 - ``ReducerBuilder``
+
+### Embedding child features
+
 - ``Scope``
-- ``ifLet(_:action:then:file:fileID:line:)``
+- ``ifLet(_:action:then:file:fileID:line:)-1yyuq``
 - ``ifCaseLet(_:action:then:file:fileID:line:)``
-- ``forEach(_:action:_:file:fileID:line:)``
+- ``forEach(_:action:element:file:fileID:line:)``
 
 ### Supporting reducers
 
-- ``BindingReducer``
+- ``Reduce``
 - ``CombineReducers``
 - ``EmptyReducer``
-- ``Reduce``
+- ``BindingReducer``
 
 ### Reducer modifiers
 
 - ``dependency(_:_:)``
 - ``transformDependency(_:transform:)``
+- ``_printChanges(_:)``
 - ``signpost(_:log:)``
-- ``debug()``
 
 ### Deprecations
 
