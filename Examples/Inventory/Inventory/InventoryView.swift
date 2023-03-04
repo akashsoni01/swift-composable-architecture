@@ -106,13 +106,19 @@ struct InventoryFeature: Reducer {
         }
         .alert(state: \.alert, action: /Action.alert)
         .confirmationDialog(state: \.confirmationDialog, action: /Action.confirmationDialog)
-        .ifLet(
-            \.addItem,
-             action: (/Action.addItem).appending(path: /SheetAction.presented)
-        ) {
-          ItemFormFeature()
-        }
+        /*
+         .ifLet(
+             \.addItem,
+              action: (/Action.addItem).appending(path: /SheetAction.presented)
+         ) {
+           ItemFormFeature()
+         }
 
+         simplify the if let and create new operator for sheet
+         */
+        .sheet(state: \.addItem, action: /Action.addItem) {
+            ItemFormFeature()
+        }
     }
 }
 
