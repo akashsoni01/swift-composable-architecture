@@ -10,75 +10,38 @@ import ComposableArchitecture
 
 struct InventoryFeature: Reducer {
     struct State : Equatable {
-        var items: IdentifiedArrayOf<Item> = []
         var alert: AlertState<Action.Alert>?
+        var items: IdentifiedArrayOf<Item> = []
 
     }
     enum Action: Equatable {
-      case alert(Alert)
-      case deleteButtonTapped(id: Item.ID)
-
-      enum Alert: Equatable {
-          case confirmDeletion(id: Item.ID)
-          case dismiss
-      }
+        case alert(AlertAction<Alert>)
+        case deleteButtonTapped(id: Item.ID)
+        
+        enum Alert: Equatable {
+            case confirmDeletion(id: Item.ID)
+        }
     }
 
-    func reduce(
-      into state: inout State, action: Action
-    ) -> Effect<Action> {
-      switch action {
-      case let .alert(.confirmDeletion(id: id)):
-        state.items.remove(id: id)
-        return .none
+    var body: some ReducerOf<Self> {
+        Reduce<State, Action> { state, action in
+          switch action {
+          case let .alert(.presented(.confirmDeletion(id: id))):
+            state.items.remove(id: id)
+            return .none
 
-      case .alert(.dismiss):
-        state.alert = nil
-        return .none
+          case .alert:
+            return .none
 
-      case let .deleteButtonTapped(id: id):
-          guard let item = state.items[id: id]
-          else { return .none }
+          case let .deleteButtonTapped(id: id):
+            guard let item = state.items[id: id]
+            else { return .none }
 
-          state.alert = AlertState {
-            TextState(#"Delete "\#(item.name)""#)
-          } actions: {
-              /*
-               Notice that a “Cancel” button appears in the alert even though we did not specify one in our AlertState. This is what we alluded to a moment ago. SwiftUI will make sure that the alert that shows is reasonable, and so if you don’t provide a cancel button it will stick one in for you. And that is further why we needed that dedicated .dismiss action, so that it could be sent when the “Cancel” button is tapped.
-
-
-               ButtonState(
-                   role: .destructive,
-                   action: .confirmDeletion(id: item.id)
-                 ) {
-                   TextState("Delete")
-                 }
-               ................
-               
-               ButtonState(
-                 role: .destructive,
-                 action: .send(
-                   .confirmDeletion(id: item.id), animation: .default
-                 )
-               ) {
-                 TextState("Delete")
-               }
-               */
-              
-              ButtonState(
-                role: .destructive,
-                action: .send(
-                  .confirmDeletion(id: item.id), animation: .default
-                )
-              ) {
-                TextState("Delete")
-              }
-          } message: {
-              TextState("Are you sure you want to delete this item?")
+            state.alert = .delete(item: item)
+            return .none
           }
-          
-        return .none
-      }
+        }
+        .alert(state: \.alert, action: /Action.alert)
     }
 }
 
@@ -135,14 +98,14 @@ struct InventoryView: View {
                ),
                dismiss: Action
              )
+             
+             
              */
-
           .alert(
-            self.store.scope(
-              state: \.alert, action: InventoryFeature.Action.alert
-            ),
-            dismiss: .dismiss
-          )
+            store: self.store.scope(
+                state: \.alert,
+                action: InventoryFeature.Action.alert)
+               )
 
         }
     }
@@ -166,4 +129,49 @@ struct Inventory_Previews: PreviewProvider {
             )
         }
     }
+}
+
+
+extension AlertState where Action == InventoryFeature.Action.Alert {
+  static func delete(item: Item) -> Self {
+    return AlertState {
+      TextState(#"Delete "\#(item.name)""#)
+    } actions: {
+        /*
+         Notice that a “Cancel” button appears in the alert even though we did not specify one in our AlertState. This is what we alluded to a moment ago. SwiftUI will make sure that the alert that shows is reasonable, and so if you don’t provide a cancel button it will stick one in for you. And that is further why we needed that dedicated .dismiss action, so that it could be sent when the “Cancel” button is tapped.
+
+
+         ButtonState(
+             role: .destructive,
+             action: .confirmDeletion(id: item.id)
+           ) {
+             TextState("Delete")
+           }
+         ................
+         
+         ButtonState(
+           role: .destructive,
+           action: .send(
+             .confirmDeletion(id: item.id), animation: .default
+           )
+         ) {
+           TextState("Delete")
+         }
+         */
+
+      ButtonState(
+        role: .destructive,
+        action: .send(
+          .confirmDeletion(id: item.id),
+          animation: .default
+        )
+      ) {
+        TextState("Delete")
+      }
+    } message: {
+      TextState(
+        "Are you sure you want to delete this item?"
+      )
+    }
+  }
 }
