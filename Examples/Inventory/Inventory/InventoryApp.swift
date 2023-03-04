@@ -12,22 +12,24 @@ import ComposableArchitecture
 struct InventoryApp: App {
     var body: some Scene {
         WindowGroup {
-          ContentView(
-            store: Store(
-              initialState: AppFeature.State(
-                inventory: InventoryFeature.State(
-                  items: [
-                    .monitor,
-                    .mouse,
-                    .keyboard,
-                    .headphones
-                  ]
+            NavigationStack {
+                ContentView(
+                  store: Store(
+                    initialState: AppFeature.State(
+                      inventory: InventoryFeature.State(
+                        items: [
+                          .monitor,
+                          .mouse,
+                          .keyboard,
+                          .headphones
+                        ]
+                      )
+                    ),
+                    reducer: AppFeature()
+                      ._printChanges()
+                  )
                 )
-              ),
-              reducer: AppFeature()
-                ._printChanges()
-            )
-          )
+            }
         }
     }
 }

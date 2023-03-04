@@ -10,16 +10,23 @@ import ComposableArchitecture
 
 struct InventoryFeature: Reducer {
     struct State : Equatable {
+        var addItem: ItemFormFeature.State?
         var alert: AlertState<Action.Alert>?
         var confirmationDialog: ConfirmationDialogState<Action.Dialog>?
         var items: IdentifiedArrayOf<Item> = []
 
     }
     enum Action: Equatable {
+        case addButtonTapped
+        case addItem(ItemFormFeature.Action)
         case alert(AlertAction<Alert>)
         case confirmationDialog(ConfirmationDialogAction<Dialog>)
         case deleteButtonTapped(id: Item.ID)
+        case dismissAddItem
         case duplicateButtonTapped(id: Item.ID)
+        case cancelAddItemButtonTapped
+        case confirmAddItemButtonTapped
+
         
         enum Alert: Equatable {
             case confirmDeletion(id: Item.ID)
@@ -33,6 +40,29 @@ struct InventoryFeature: Reducer {
     var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
           switch action {
+          case .addButtonTapped:
+              state.addItem = ItemFormFeature.State(
+                item: Item(name: "", status: .inStock(quantity: 1))
+              )
+              return .none
+          case .dismissAddItem:
+              state.addItem = nil
+              return .none
+              
+          case .addItem:
+            return .none
+              
+          case .confirmAddItemButtonTapped:
+            defer { state.addItem = nil }
+            guard let item = state.addItem?.item
+            else { return .none }
+            state.items.append(item)
+            return .none
+              
+          case .cancelAddItemButtonTapped:
+              state.addItem = nil
+              return .none
+
           case let .alert(.presented(.confirmDeletion(id: id))):
             state.items.remove(id: id)
             return .none
@@ -71,18 +101,44 @@ struct InventoryFeature: Reducer {
         }
         .alert(state: \.alert, action: /Action.alert)
         .confirmationDialog(state: \.confirmationDialog, action: /Action.confirmationDialog)
+        .ifLet(\.addItem, action: /Action.addItem) {
+          ItemFormFeature()
+        }
+
     }
 }
 
 struct InventoryView: View {
     let store: StoreOf<InventoryFeature>
     
+    struct ViewState: Equatable {
+      let addItemID: Item.ID?
+      let items: IdentifiedArrayOf<Item>
+
+      init(state: InventoryFeature.State) {
+        self.addItemID = state.addItem?.item.id
+        self.items = state.items
+      }
+    }
+
     var body: some View {
         WithViewStore(
-          self.store, observe: \.items
-        ) { viewStore in
+          self.store, observe: ViewState.init
+        ) {
+            /*
+             viewStore in
+
+             This code and sheet present code may cause our preview to not show so in order to deal that use
+             
+             (
+               viewStore: ViewStore<ViewState, InventoryFeature.Action>
+             )
+             
+             the above code will tell compoiler explicitly about the viewstore
+             */
+            (viewStore: ViewStore<ViewState, InventoryFeature.Action>)  in
           List {
-            ForEach(viewStore.state) { item in
+            ForEach(viewStore.items) { item in
               HStack {
                 VStack(alignment: .leading) {
                   Text(item.name)
@@ -127,6 +183,20 @@ struct InventoryView: View {
             }
           }
             /*
+             Error in preview while calling an action after 2 sec.
+             https://github.com/akashsoni01/POC/blob/master/Episode%20%23224_%20Composable%20Navigation_%20Sheets.png
+             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                 viewStore.send(.addButtonTapped)
+             }
+             */
+          .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+              Button("Add") {
+                viewStore.send(.addButtonTapped)
+              }
+            }
+          }
+            /*
              And there’s a second argument called dismiss. This is here because it technically is possible to create an alert button that doesn’t send an action at all. In fact, SwiftUI can even implicitly add buttons into the alert for you if you forget to do something, such as provide a cancel button. It is also even possible for the user to hit the escape key on a connected keyboard to dismiss an alert.
              .alert(
                self.store.scope(
@@ -147,7 +217,44 @@ struct InventoryView: View {
                 state: \.confirmationDialog,
                 action: InventoryFeature.Action.confirmationDialog)
                )
+            
+          .sheet(
+            item: viewStore.binding(
+              get: {
+                $0.addItemID.map { Identified($0, id: \.self) }
+              },
+              send: .dismissAddItem
+            )
+          ) { addItemID in
+              IfLetStore(
+                self.store.scope(
+                  state: \.addItem,
+                  action: InventoryFeature.Action.addItem
+                )
+              ) { store in
+                  /*
+                   Adding NavigationStack and toolbar will help to customise the view if defined in parent view.
+                   */
+                  NavigationStack {
+                    ItemFormView(store: store)
+                      .toolbar {
+                          HStack {
+                              Button("Cancel") {
+                                viewStore.send(.cancelAddItemButtonTapped)
+                              }
+                              
+                              Spacer()
+                              
+                              Button("Add") {
+                                viewStore.send(.confirmAddItemButtonTapped)
+                              }
+                          }
 
+                      }
+                      .navigationTitle("New item")
+                  }
+              }
+          }
         }
     }
 }
