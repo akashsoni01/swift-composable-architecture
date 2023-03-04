@@ -89,4 +89,31 @@ final class InventoryTests: XCTestCase {
 
         
     }
+    
+    func testDuplicate() async {
+        let item = Item.headphones
+
+        let store = TestStore(
+          initialState: InventoryFeature.State(items: [item]),
+          reducer: InventoryFeature()
+        ) {
+          $0.uuid = .incrementing
+        }
+
+        await store.send(.duplicateButtonTapped(id: item.id)) {
+          $0.confirmationDialog = .duplicate(item: item)
+        }
+        await store.send(.confirmationDialog(.presented(.confirmDuplicate(id: item.id)))) {
+          $0.confirmationDialog = nil
+          $0.items = [
+            Item(
+              id: UUID(uuidString: "00000000-0000-0000-0000-000000000000")!,
+              name: "Headphones",
+              color: .blue,
+              status: .inStock(quantity: 20)
+            ),
+            item
+          ]
+        }
+      }
 }

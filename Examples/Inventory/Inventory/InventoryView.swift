@@ -11,15 +11,22 @@ import ComposableArchitecture
 struct InventoryFeature: Reducer {
     struct State : Equatable {
         var alert: AlertState<Action.Alert>?
+        var confirmationDialog: ConfirmationDialogState<Action.Dialog>?
         var items: IdentifiedArrayOf<Item> = []
 
     }
     enum Action: Equatable {
         case alert(AlertAction<Alert>)
+        case confirmationDialog(ConfirmationDialogAction<Dialog>)
         case deleteButtonTapped(id: Item.ID)
+        case duplicateButtonTapped(id: Item.ID)
         
         enum Alert: Equatable {
             case confirmDeletion(id: Item.ID)
+        }
+        
+        enum Dialog: Equatable {
+            case confirmDuplicate(id: Item.ID)
         }
     }
 
@@ -33,15 +40,37 @@ struct InventoryFeature: Reducer {
           case .alert:
             return .none
 
+          case let .confirmationDialog(.presented(.confirmDuplicate(id: id))):
+              guard let item = state.items[id: id],
+                    let index = state.items.index(id: id)
+              else { return .none }
+
+              state.items.insert(item.duplicate(), at: index)
+            return .none
+
+          case .confirmationDialog(.dismiss):
+              return .none
+
+          case .confirmationDialog:
+            return .none
+
           case let .deleteButtonTapped(id: id):
             guard let item = state.items[id: id]
             else { return .none }
 
             state.alert = .delete(item: item)
             return .none
+              
+          case let .duplicateButtonTapped(id: id):
+            guard let item = state.items[id: id]
+            else { return .none }
+              // show a confirmation confirmationDialog
+              state.confirmationDialog = .duplicate(item: item)
+            return .none
           }
         }
         .alert(state: \.alert, action: /Action.alert)
+        .confirmationDialog(state: \.confirmationDialog, action: /Action.confirmationDialog)
     }
 }
 
@@ -78,6 +107,13 @@ struct InventoryView: View {
                 }
 
                 Button {
+                    viewStore.send(.duplicateButtonTapped(id: item.id))
+                } label: {
+                  Image(systemName: "doc.on.doc.fill")
+                }
+                .padding(.leading)
+
+                Button {
                     viewStore.send(.deleteButtonTapped(id: item.id))
                 } label: {
                   Image(systemName: "trash.fill")
@@ -105,6 +141,11 @@ struct InventoryView: View {
             store: self.store.scope(
                 state: \.alert,
                 action: InventoryFeature.Action.alert)
+               )
+          .confirmationDialog(
+            store: self.store.scope(
+                state: \.confirmationDialog,
+                action: InventoryFeature.Action.confirmationDialog)
                )
 
         }
@@ -171,6 +212,27 @@ extension AlertState where Action == InventoryFeature.Action.Alert {
     } message: {
       TextState(
         "Are you sure you want to delete this item?"
+      )
+    }
+  }
+}
+
+extension ConfirmationDialogState where Action == InventoryFeature.Action.Dialog {
+  static func duplicate(item: Item) -> Self {
+    Self {
+      TextState(#"Duplicate "\#(item.name)""#)
+    } actions: {
+      ButtonState(
+        action: .send(
+          .confirmDuplicate(id: item.id),
+          animation: .default
+        )
+      ) {
+        TextState("Duplicate")
+      }
+    } message: {
+      TextState(
+        "Are you sure you want to duplicate this item?"
       )
     }
   }
