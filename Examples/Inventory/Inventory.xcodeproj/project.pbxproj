@@ -11,6 +11,13 @@
 		FF4AF86F29B3588F00BBDFDB /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF86E29B3588F00BBDFDB /* Navigation.swift */; };
 		FF4AF87229B3652200BBDFDB /* SwiftUINavigation in Frameworks */ = {isa = PBXBuildFile; productRef = FF4AF87129B3652200BBDFDB /* SwiftUINavigation */; };
 		FF4AF87629B3774C00BBDFDB /* ItemForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF87529B3774C00BBDFDB /* ItemForm.swift */; };
+		FF4AF87929B7295E00BBDFDB /* YourList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF87829B7295E00BBDFDB /* YourList.swift */; };
+		FF4AF87B29B7296600BBDFDB /* YourDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF87A29B7296600BBDFDB /* YourDetail.swift */; };
+		FF4AF87D29B7296E00BBDFDB /* YourEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF87C29B7296E00BBDFDB /* YourEdit.swift */; };
+		FF4AF87F29B7298A00BBDFDB /* YourDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF87E29B7298A00BBDFDB /* YourDashboard.swift */; };
+		FF4AF88129B7299700BBDFDB /* YourItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF88029B7299700BBDFDB /* YourItem.swift */; };
+		FF4AF88329B729A400BBDFDB /* YourModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF88229B729A400BBDFDB /* YourModel.swift */; };
+		FF4AF88529B72B2F00BBDFDB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF88429B72B2F00BBDFDB /* Constants.swift */; };
 		FFD84E6529A2383500B6AC21 /* InventoryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD84E6429A2383500B6AC21 /* InventoryApp.swift */; };
 		FFD84E6729A2383500B6AC21 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD84E6629A2383500B6AC21 /* ContentView.swift */; };
 		FFD84E6929A2383600B6AC21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFD84E6829A2383600B6AC21 /* Assets.xcassets */; };
@@ -38,6 +45,13 @@
 		FF4AF86929A4FD9400BBDFDB /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		FF4AF86E29B3588F00BBDFDB /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		FF4AF87529B3774C00BBDFDB /* ItemForm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemForm.swift; sourceTree = "<group>"; };
+		FF4AF87829B7295E00BBDFDB /* YourList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourList.swift; sourceTree = "<group>"; };
+		FF4AF87A29B7296600BBDFDB /* YourDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourDetail.swift; sourceTree = "<group>"; };
+		FF4AF87C29B7296E00BBDFDB /* YourEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourEdit.swift; sourceTree = "<group>"; };
+		FF4AF87E29B7298A00BBDFDB /* YourDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourDashboard.swift; sourceTree = "<group>"; };
+		FF4AF88029B7299700BBDFDB /* YourItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourItem.swift; sourceTree = "<group>"; };
+		FF4AF88229B729A400BBDFDB /* YourModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YourModel.swift; sourceTree = "<group>"; };
+		FF4AF88429B72B2F00BBDFDB /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		FFD84E6129A2383500B6AC21 /* Inventory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Inventory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFD84E6429A2383500B6AC21 /* InventoryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InventoryApp.swift; sourceTree = "<group>"; };
 		FFD84E6629A2383500B6AC21 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -72,6 +86,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FF4AF87729B7294700BBDFDB /* YourFeature */ = {
+			isa = PBXGroup;
+			children = (
+				FF4AF87829B7295E00BBDFDB /* YourList.swift */,
+				FF4AF87A29B7296600BBDFDB /* YourDetail.swift */,
+				FF4AF87C29B7296E00BBDFDB /* YourEdit.swift */,
+				FF4AF87E29B7298A00BBDFDB /* YourDashboard.swift */,
+				FF4AF88029B7299700BBDFDB /* YourItem.swift */,
+				FF4AF88229B729A400BBDFDB /* YourModel.swift */,
+				FF4AF88429B72B2F00BBDFDB /* Constants.swift */,
+			);
+			path = YourFeature;
+			sourceTree = "<group>";
+		};
 		FFD84E5829A2383500B6AC21 = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +122,7 @@
 		FFD84E6329A2383500B6AC21 /* Inventory */ = {
 			isa = PBXGroup;
 			children = (
+				FF4AF87729B7294700BBDFDB /* YourFeature */,
 				FFD84E6429A2383500B6AC21 /* InventoryApp.swift */,
 				FFD84E6629A2383500B6AC21 /* ContentView.swift */,
 				FFD84E6829A2383600B6AC21 /* Assets.xcassets */,
@@ -242,13 +271,20 @@
 			files = (
 				FF4AF87629B3774C00BBDFDB /* ItemForm.swift in Sources */,
 				FFD84E7629A251F900B6AC21 /* FirstTabView.swift in Sources */,
+				FF4AF87929B7295E00BBDFDB /* YourList.swift in Sources */,
+				FF4AF88129B7299700BBDFDB /* YourItem.swift in Sources */,
 				FFD84E7A29A252E100B6AC21 /* ThirdTabView.swift in Sources */,
 				FFD84E8929A292FA00B6AC21 /* Vanila.swift in Sources */,
 				FF4AF86F29B3588F00BBDFDB /* Navigation.swift in Sources */,
+				FF4AF88529B72B2F00BBDFDB /* Constants.swift in Sources */,
 				FFD84E6729A2383500B6AC21 /* ContentView.swift in Sources */,
+				FF4AF88329B729A400BBDFDB /* YourModel.swift in Sources */,
 				FFD84E6529A2383500B6AC21 /* InventoryApp.swift in Sources */,
 				FFD84E7829A252D500B6AC21 /* InventoryView.swift in Sources */,
 				FF4AF86A29A4FD9400BBDFDB /* Models.swift in Sources */,
+				FF4AF87D29B7296E00BBDFDB /* YourEdit.swift in Sources */,
+				FF4AF87F29B7298A00BBDFDB /* YourDashboard.swift in Sources */,
+				FF4AF87B29B7296600BBDFDB /* YourDetail.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

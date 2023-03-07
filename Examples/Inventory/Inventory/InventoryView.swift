@@ -268,6 +268,7 @@ struct InventoryView: View {
                                  viewStore.send(.cancelAddItemButtonTapped)
                                }
                                
+                               Spacer()
                                    
                                Button("Add") {
                                  viewStore.send(.confirmAddItemButtonTapped)
