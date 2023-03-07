@@ -17,20 +17,13 @@ public typealias EffectTask = Effect
 @available(watchOS, deprecated: 9999.0, renamed: "Reducer")
 public typealias ReducerProtocol = Reducer
 
-@available(iOS, deprecated: 9999.0, renamed: "ReducerOf")
-@available(macOS, deprecated: 9999.0, renamed: "ReducerOf")
-@available(tvOS, deprecated: 9999.0, renamed: "ReducerOf")
-@available(watchOS, deprecated: 9999.0, renamed: "ReducerOf")
-public typealias ReducerProtocolOf<R: Reducer> = Reducer<R.State, R.Action>
-
-// MARK: - Deprecated after 0.50.3
-
-@available(
-  *,
-  deprecated,
-  message: "Use 'Effect<Action>.Send' instead."
-)
-public typealias Send<Action> = Effect<Action>.Send
+#if swift(>=5.7.1)
+  @available(iOS, deprecated: 9999.0, renamed: "ReducerOf")
+  @available(macOS, deprecated: 9999.0, renamed: "ReducerOf")
+  @available(tvOS, deprecated: 9999.0, renamed: "ReducerOf")
+  @available(watchOS, deprecated: 9999.0, renamed: "ReducerOf")
+  public typealias ReducerProtocolOf<R: Reducer> = Reducer<R.State, R.Action>
+#endif
 
 // MARK: - Deprecated after 0.49.2
 

@@ -635,8 +635,8 @@ public final class TestStore<State, Action, ScopedState, ScopedAction, Environme
     Environment == Void
   {
     var dependencies = DependencyValues._current
-    prepareDependencies(&dependencies)
     let initialState = withDependencies {
+      prepareDependencies(&dependencies)
       $0 = dependencies
     } operation: {
       initialState()
@@ -839,6 +839,7 @@ public final class TestStore<State, Action, ScopedState, ScopedAction, Environme
         line: self.line
       )
     }
+
     for effect in self.reducer.inFlightEffects {
       XCTFailHelper(
         """
@@ -1382,13 +1383,13 @@ extension TestStore where ScopedState: Equatable, Action: Equatable {
     guard !self.reducer.inFlightEffects.isEmpty
     else {
       _ = {
-        self.receive(expectedAction, assert: updateStateToExpectedResult, file: file, line: line)
+        self._receive(expectedAction, assert: updateStateToExpectedResult, file: file, line: line)
       }()
       return
     }
     await self.receiveAction(timeout: nanoseconds, file: file, line: line)
     _ = {
-      self.receive(expectedAction, assert: updateStateToExpectedResult, file: file, line: line)
+      self._receive(expectedAction, assert: updateStateToExpectedResult, file: file, line: line)
     }()
     await Task.megaYield()
   }
