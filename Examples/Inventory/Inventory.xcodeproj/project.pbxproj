@@ -18,6 +18,7 @@
 		FF4AF88129B7299700BBDFDB /* YourItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF88029B7299700BBDFDB /* YourItem.swift */; };
 		FF4AF88329B729A400BBDFDB /* YourModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF88229B729A400BBDFDB /* YourModel.swift */; };
 		FF4AF88529B72B2F00BBDFDB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4AF88429B72B2F00BBDFDB /* Constants.swift */; };
+		FF4AF88A29B7486D00BBDFDB /* DependenciesAdditions in Frameworks */ = {isa = PBXBuildFile; productRef = FF4AF88929B7486D00BBDFDB /* DependenciesAdditions */; };
 		FFD84E6529A2383500B6AC21 /* InventoryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD84E6429A2383500B6AC21 /* InventoryApp.swift */; };
 		FFD84E6729A2383500B6AC21 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFD84E6629A2383500B6AC21 /* ContentView.swift */; };
 		FFD84E6929A2383600B6AC21 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFD84E6829A2383600B6AC21 /* Assets.xcassets */; };
@@ -71,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF4AF88A29B7486D00BBDFDB /* DependenciesAdditions in Frameworks */,
 				FF4AF87229B3652200BBDFDB /* SwiftUINavigation in Frameworks */,
 				FFD84E7429A2386400B6AC21 /* ComposableArchitecture in Frameworks */,
 			);
@@ -181,6 +183,7 @@
 			packageProductDependencies = (
 				FFD84E7329A2386400B6AC21 /* ComposableArchitecture */,
 				FF4AF87129B3652200BBDFDB /* SwiftUINavigation */,
+				FF4AF88929B7486D00BBDFDB /* DependenciesAdditions */,
 			);
 			productName = Inventory;
 			productReference = FFD84E6129A2383500B6AC21 /* Inventory.app */;
@@ -234,6 +237,7 @@
 			mainGroup = FFD84E5829A2383500B6AC21;
 			packageReferences = (
 				FF4AF87029B3652200BBDFDB /* XCRemoteSwiftPackageReference "swiftui-navigation" */,
+				FF4AF88829B7486D00BBDFDB /* XCRemoteSwiftPackageReference "swift-dependencies-additions" */,
 			);
 			productRefGroup = FFD84E6229A2383500B6AC21 /* Products */;
 			projectDirPath = "";
@@ -557,6 +561,14 @@
 				minimumVersion = 0.6.1;
 			};
 		};
+		FF4AF88829B7486D00BBDFDB /* XCRemoteSwiftPackageReference "swift-dependencies-additions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tgrapperon/swift-dependencies-additions";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -564,6 +576,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FF4AF87029B3652200BBDFDB /* XCRemoteSwiftPackageReference "swiftui-navigation" */;
 			productName = SwiftUINavigation;
+		};
+		FF4AF88929B7486D00BBDFDB /* DependenciesAdditions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FF4AF88829B7486D00BBDFDB /* XCRemoteSwiftPackageReference "swift-dependencies-additions" */;
+			productName = DependenciesAdditions;
 		};
 		FFD84E7329A2386400B6AC21 /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
