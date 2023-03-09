@@ -1,5 +1,18 @@
 import Combine
 
+extension EffectPublisher where Failure == Never {
+  /// Creates an effect from a Combine publisher.
+  ///
+  /// - Parameter createPublisher: The closure to execute when the effect is performed.
+  /// - Returns: An effect wrapping a Combine publisher.
+  public static func publisher<P: Publisher>(_ createPublisher: @escaping () -> P) -> Self
+  where P.Output == Action, P.Failure == Never {
+    Self(
+      operation: .publisher(Deferred(createPublisher: createPublisher).eraseToAnyPublisher())
+    )
+  }
+}
+
 @available(*, deprecated)
 extension EffectPublisher: Publisher {
   public typealias Output = Action
@@ -75,7 +88,10 @@ extension EffectPublisher {
   ///
   /// - Parameter publisher: A publisher.
   @available(
-    *, deprecated, message: "Iterate over 'Publisher.values' in an 'Effect.run', instead."
+    *,
+    deprecated,
+    message:
+      "Iterate over 'Publisher.values' in an 'EffectTask.run', instead, or use 'EffectTask.publisher'."
   )
   public init<P: Publisher>(_ publisher: P) where P.Output == Output, P.Failure == Failure {
     self.operation = .publisher(publisher.eraseToAnyPublisher())
@@ -305,7 +321,8 @@ extension Publisher {
   /// - Returns: An effect that wraps `self`.
   @available(
     *, deprecated,
-    message: "Iterate over 'Publisher.values' in an 'Effect.run', instead."
+    message:
+      "Iterate over 'Publisher.values' in an 'EffectTask.run', instead, or use 'EffectTask.publisher'."
   )
   public func eraseToEffect() -> EffectPublisher<Output, Failure> {
     EffectPublisher(self)
@@ -327,7 +344,9 @@ extension Publisher {
   ///   - transform: A mapping function that converts `Output` to another type.
   /// - Returns: An effect that wraps `self` after mapping `Output` values.
   @available(
-    *, deprecated, message: "Iterate over 'Publisher.values' in an 'Effect.run', instead."
+    *, deprecated,
+    message:
+      "Iterate over 'Publisher.values' in an 'EffectTask.run', instead, or use 'EffectTask.publisher'."
   )
   public func eraseToEffect<T>(
     _ transform: @escaping (Output) -> T
@@ -359,7 +378,9 @@ extension Publisher {
   ///
   /// - Returns: An effect that wraps `self`.
   @available(
-    *, deprecated, message: "Iterate over 'Publisher.values' in an 'Effect.run', instead."
+    *, deprecated,
+    message:
+      "Iterate over 'Publisher.values' in an 'EffectTask.run', instead, or use 'EffectTask.publisher'."
   )
   public func catchToEffect() -> Effect<Result<Output, Failure>> {
     self.catchToEffect { $0 }
@@ -381,7 +402,9 @@ extension Publisher {
   ///   - transform: A mapping function that converts `Result<Output,Failure>` to another type.
   /// - Returns: An effect that wraps `self`.
   @available(
-    *, deprecated, message: "Iterate over 'Publisher.values' in an 'Effect.run', instead."
+    *, deprecated,
+    message:
+      "Iterate over 'Publisher.values' in an 'EffectTask.run', instead, or use 'EffectTask.publisher'."
   )
   public func catchToEffect<T>(
     _ transform: @escaping (Result<Output, Failure>) -> T
@@ -436,7 +459,7 @@ extension Publisher {
 
 @usableFromInline
 internal struct EffectPublisherWrapper<Action, Failure: Error>: Publisher {
-  @usableFromInline  typealias Output = Action
+  @usableFromInline typealias Output = Action
 
   let effect: EffectPublisher<Action, Failure>
 
