@@ -99,7 +99,7 @@ private struct OldConfirmationDialogModifier<Action>: ViewModifier {
 
   func body(content: Content) -> some View {
     #if !os(macOS)
-      return content.actionSheet(item: viewStore.binding(send: dismiss)) {
+      content.actionSheet(item: viewStore.binding(send: dismiss)) {
         ActionSheet($0) { action in
           if let action = action {
             viewStore.send(action)
@@ -107,7 +107,7 @@ private struct OldConfirmationDialogModifier<Action>: ViewModifier {
         }
       }
     #else
-      return EmptyView()
+      EmptyView()
     #endif
   }
 }
@@ -155,7 +155,7 @@ private struct PresentationConfirmationDialogModifier<State, Action, ButtonActio
         }
       },
       message: {
-        $0.message.map(Text.init) ?? Text("")
+        $0.message.map(Text.init)
       }
     )
   }
