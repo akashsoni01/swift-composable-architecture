@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComposableArchitecture - send(_:while:)</title>
+    <link rel="stylesheet" type="text/css" href="/swift-composable-architecture/all.css" media="all" />
+</head>
+<body>
+    <header>
+        <a href="/swift-composable-architecture/">
+            <strong>
+                ComposableArchitecture
+            </strong>
+            <span>Documentation</span>
+        </a>
+    </header>
+
+    <!--
+    <form class="search">
+        <input type="search" placeholder="Search" />
+    </form>
+    -->
+
+    <nav>
+        <div class="wrapper">
+            <h2>On This Page</h2>
+            <ol/>
+        </div>
+    </nav>
+
+    <main>
+        <article>
+            <h1>
+<small>Function</small>
+<span class="name">send(_:​while:​)</span>
+</h1>
+
+<div class="declaration">
+<pre class="highlight"><code><html><body><span class="keyword">public</span> <span class="keyword">func</span> <span class="function">send</span>(
+      <span class="keyword">_</span> <span class="variable">action</span>: <span class="type">Action</span>,
+      <span class="variable">while</span> <span class="variable">predicate</span>: <span class="attribute">@</span><span class="attribute">escaping</span> (<span class="type">State</span>) -&gt; <span class="type">Bool</span>
+    ) </body></html></code></pre>
+</div>
+<div class="summary" role="doc-abstract">
+    <p>Sends an action into the store and then suspends while a piece of state is <code>true</code>.</p>
+
+</div>
+<div class="discussion">
+    <p>This method can be used to interact with async/await code, allowing you to suspend while
+work is being performed in an effect. One common example of this is using SwiftUI's
+<code>.refreshable</code> method, which shows a loading indicator on the screen while work is being
+performed.</p>
+
+<p>For example, suppose we wanted to load some data from the network when a pull-to-refresh
+gesture is performed on a list. The domain and logic for this feature can be modeled like so:</p>
+
+<html><body><pre class="highlight"><code><span class="keyword">struct</span> <span class="type">State</span>: <span class="type">Equatable</span> {
+  <span class="keyword">var</span> <span class="variable">isLoading</span> = <span class="keyword">false</span>
+  <span class="keyword">var</span> <span class="variable">response</span>: <span class="type">String</span>?
+}
+
+<span class="keyword">enum</span> <span class="type">Action</span> {
+  <span class="keyword">case</span> <span class="variable">pulledToRefresh</span>
+  <span class="keyword">case</span> <span class="variable">receivedResponse</span>(<span class="type">String</span>?)
+}
+
+<span class="keyword">struct</span> <span class="type">Environment</span> {
+  <span class="keyword">var</span> <span class="variable">fetch</span>: () -&gt; <a href="/swift-composable-architecture/Effect"><span class="type">Effect</span></a>&lt;<span class="type">String</span>?, <span class="type">Never</span>&gt;
+}
+
+<span class="keyword">let</span> <span class="variable">reducer</span> = <span class="variable">Reducer</span>&lt;<span class="type">State</span>, <span class="type">Action</span>, <span class="type">Environment</span>&gt; { <span class="variable">state</span>, <span class="variable">action</span>, <span class="variable">environment</span> <span class="keyword">in</span>
+  <span class="keyword">switch</span> <span class="variable">action</span> {
+  <span class="keyword">case</span> .<span class="variable">pulledToRefresh</span>:
+    <span class="type">state</span>.<span class="variable">isLoading</span> = <span class="keyword">true</span>
+    <span class="keyword">return</span> <span class="variable">environment</span>.<span class="variable">fetch</span>()
+      .<span class="variable">map</span>(<span class="variable">Action</span>.<span class="variable">receivedResponse</span>)
+
+  <span class="keyword">case</span> <span class="keyword">let</span> .<span class="variable">receivedResponse</span>(<span class="variable">response</span>):
+    <span class="type">state</span>.<span class="variable">isLoading</span> = <span class="keyword">false</span>
+    <span class="variable">state</span>.<span class="variable">response</span> = <span class="variable">response</span>
+    <span class="keyword">return</span> .<span class="variable">none</span>
+  }
+}
+</code></pre></body></html>
+<p>Note that we keep track of an <code>isLoading</code> boolean in our state so that we know exactly when
+the network response is being performed.</p>
+
+<p>The view can show the fact in a <code>List</code>, if it's present, and we can use the <code>.refreshable</code>
+view modifier to enhance the list with pull-to-refresh capabilities:</p>
+
+<html><body><pre class="highlight"><code><span class="keyword">struct</span> <span class="type">MyView</span>: <span class="type">View</span> {
+  <span class="keyword">let</span> <span class="variable">store</span>: <a href="/swift-composable-architecture/Store"><span class="type">Store</span></a>&lt;<span class="type">State</span>, <span class="type">Action</span>&gt;
+
+  <span class="keyword">var</span> <span class="variable">body</span>: <span class="keyword">some</span> <span class="type">View</span> {
+    <span class="variable">WithViewStore</span>(<span class="keyword">self</span>.<span class="variable">store</span>) { <span class="variable">viewStore</span> <span class="keyword">in</span>
+      <span class="variable">List</span> {
+        <span class="keyword">if</span> <span class="keyword">let</span> <span class="variable">response</span> = <span class="variable">viewStore</span>.<span class="variable">response</span> {
+          <span class="variable">Text</span>(<span class="variable">response</span>)
+        }
+      }
+      .<span class="variable">refreshable</span> {
+        <span class="variable">await</span> <span class="variable">viewStore</span>.<span class="variable">send</span>(.<span class="variable">pulledToRefresh</span>, <span class="variable">while</span>: \.<span class="variable">isLoading</span>)
+      }
+    }
+  }
+}
+</code></pre></body></html>
+<p>Here we've used the <code>send(_:while:)</code> method to suspend while the <code>isLoading</code> state is
+<code>true</code>. Once that piece of state flips back to <code>false</code> the method will resume, signaling to
+<code>.refreshable</code> that the work has finished which will cause the loading indicator to
+disappear.</p>
+
+<p><strong>Note:</strong> <code>ViewStore</code> is not thread safe and you should only send actions to it from the
+main thread. If you are wanting to send actions on background threads due to the fact that
+the reducer is performing computationally expensive work, then a better way to handle this
+is to wrap that work in an <code>Effect</code> that is performed on a background thread so that the
+result can be fed back into the store.</p>
+
+</div>
+<h4>Parameters</h4>
+
+<table class="parameters">
+  <thead hidden>
+  <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+  </tr>
+  </thead>
+  <tbody>
+    <tr>
+    <th>action</th>
+    <td><code class="type">Action</code></td>
+    <td><p>An action.</p>
+</td>
+</tr>
+<tr>
+    <th>predicate</th>
+    <td><code class="type">@escaping (State) -&gt; Bool</code></td>
+    <td><p>A predicate on <code>State</code> that determines for how long this method should suspend.</p>
+</td>
+</tr>
+  </tbody>
+</table>
+        </article>
+    </main>
+
+    <footer>
+        <p>
+    Generated on <time datetime="2021-09-23T14:28:18+0000">September 23, 2021</time> using <a href="https://github.com/SwiftDocOrg/swift-doc">swift-doc</a> <span class="version">1.0.0-rc.1</span>.
+</p>
+    </footer>
+</body>
+</html>
